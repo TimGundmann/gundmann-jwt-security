@@ -29,7 +29,7 @@ node {
         buildInfo = Artifactory.newBuildInfo()
    }
    stage('Build') {
-   	 rtMaven.run pom: 'pom.xml', goals: 'clean package', buildInfo: buildInfo
+   	 rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
    }
    stage('Results') {
 //      junit '**/target/surefire-reports/TEST-*.xml'
