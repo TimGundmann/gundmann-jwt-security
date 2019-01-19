@@ -18,7 +18,7 @@ node {
        sh "'${mvnHome}/bin/mvn' versions:set -DnewVersion=${newVersion}"
        currentBuild.displayName = newVersion
        
-        server = Artifactory.server SERVER_ID
+        server = Artifactory.server 'gundmannArtifactory'
 
         rtMaven = Artifactory.newMavenBuild()
         rtMaven.tool = tool
