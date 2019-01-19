@@ -1,4 +1,10 @@
 node {
+
+    def server
+    def buildInfo
+    def rtMaven
+    
+    
    def mvnHome
    stage('Preparation') { 
       git 'https://github.com/TimGundmann/gundmann-jwt-security.git'
@@ -11,12 +17,26 @@ node {
        newVersion = pom.version + "." + env.BUILD_NUMBER
        sh "'${mvnHome}/bin/mvn' versions:set -DnewVersion=${newVersion}"
        currentBuild.displayName = newVersion
+       
+        server = Artifactory.server SERVER_ID
+
+        rtMaven = Artifactory.newMavenBuild()
+        rtMaven.tool = tool
+        rtMaven.deployer releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local', server: server
+        rtMaven.resolver releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot', server: server
+        rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
+
+        buildInfo = Artifactory.newBuildInfo()
    }
    stage('Build') {
-     sh "'${mvnHome}/bin/mvn' clean package"
+   	 rtMaven.run pom: 'pom.xml', goals: 'clean package', buildInfo: buildInfo
    }
    stage('Results') {
 //      junit '**/target/surefire-reports/TEST-*.xml'
-      archive 'target/*.jar'
+//      archive 'target/*.jar'
+   }
+   
+   stage ('Publish build info') {
+        server.publishBuildInfo buildInfo
    }
 }
