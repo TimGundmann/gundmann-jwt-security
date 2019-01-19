@@ -23,13 +23,13 @@ node {
         rtMaven = Artifactory.newMavenBuild()
         rtMaven.tool = 'maven 3.3.9'
         rtMaven.deployer releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local', server: server
-        rtMaven.resolver releaseRepo: 'jcenter', snapshotRepo: 'libs-snapshot', server: server
+        rtMaven.resolver releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot', server: server
         rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
         buildInfo = Artifactory.newBuildInfo()
    }
    stage('Build') {
-   	 rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+   	 rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
    }
    stage('Results') {
 //      junit '**/target/surefire-reports/TEST-*.xml'
