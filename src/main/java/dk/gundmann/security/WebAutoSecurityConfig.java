@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableConfigurationProperties(SecurityProperties.class)
 @ConditionalOnClass(EnableJwtSecurity.class)
-@Order(99)
+@Order(101)
 public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private AuthenticationProvider authenticationProvider;
