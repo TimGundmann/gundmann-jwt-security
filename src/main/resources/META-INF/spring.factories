@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=dk.gundmann.security.SecurityProperties
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=dk.gundmann.security.WebAutoSecurityConfig
