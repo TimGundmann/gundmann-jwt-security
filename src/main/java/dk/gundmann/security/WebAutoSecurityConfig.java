@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties(SecurityProperties.class)
-@Order(101)
+@Order(99)
 public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private AuthenticationProvider authenticationProvider;
