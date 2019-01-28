@@ -2,9 +2,9 @@ package dk.gundmann.security;
 
 import java.util.Arrays;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,8 +16,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableConfigurationProperties(SecurityConfig.class)
 public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private SecurityConfig securityConfig;
+
+	public WebAutoSecurityConfig(SecurityConfig securityConfig) {
+		this.securityConfig = securityConfig;
+	}
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**")
@@ -28,15 +35,15 @@ public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 				.authorizeRequests().anyRequest().authenticated()
 			.and()
-				.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(new JWTAuthenticationFilter(securityConfig), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("*"));
-		configuration.setAllowedHeaders(Arrays.asList(TokenAuthenticationService.HEADER_STRING));
-		configuration.setExposedHeaders(Arrays.asList(TokenAuthenticationService.HEADER_STRING));
+		configuration.setAllowedHeaders(Arrays.asList(securityConfig.getHeaderString()));
+		configuration.setExposedHeaders(Arrays.asList(securityConfig.getHeaderString()));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "HEADER"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
