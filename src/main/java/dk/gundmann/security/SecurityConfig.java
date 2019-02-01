@@ -11,5 +11,6 @@ public class SecurityConfig {
 	private String secret;
 	private String tokenPrefix;
 	private String headerString;
+	private String mailPassword;
 	
 }
