@@ -42,7 +42,7 @@ public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("*"));
-		configuration.setAllowedHeaders(Arrays.asList(securityConfig.getHeaderString()));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
 		configuration.setExposedHeaders(Arrays.asList(securityConfig.getHeaderString()));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "HEADER"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
