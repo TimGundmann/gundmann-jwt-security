@@ -40,6 +40,7 @@ public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.antMatcher("/**")
 		  .exceptionHandling()
 		  	.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+		  	.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN))
 		  .and()
 		  .cors()
 			.and()
