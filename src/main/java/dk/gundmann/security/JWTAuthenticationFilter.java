@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -56,7 +57,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 		        .getBody()
 		        .getSubject());
 		} catch (Exception e) {
-			throw new HttpServerErrorException(HttpStatus.FORBIDDEN, "Error parsing token");
+			throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "Error parsing token");
 		}
 	}
 
