@@ -44,6 +44,7 @@ public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().anyRequest().authenticated()
 			.and()
 				.addFilterBefore(new JWTAuthenticationFilter(securityConfig), UsernamePasswordAuthenticationFilter.class);
+				
 	}
 	
 	@Bean
