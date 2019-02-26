@@ -1,7 +1,5 @@
 package dk.gundmann.security;
 
-import static java.util.Collections.emptyList;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,11 +12,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.filter.GenericFilterBean;
 
 import io.jsonwebtoken.Jwts;
@@ -49,11 +49,15 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
     }
 
 	private Optional<String> parseUserName(String token) {
+		try {
 		return Optional.ofNullable(Jwts.parser()
 		        .setSigningKey(securityConfig.getSecret())
 		        .parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
 		        .getBody()
 		        .getSubject());
+		} catch (Exception e) {
+			throw new HttpServerErrorException(HttpStatus.FORBIDDEN, "Error parsing token");
+		}
 	}
 
 	private Collection<? extends GrantedAuthority> parseRoles(String token) {
