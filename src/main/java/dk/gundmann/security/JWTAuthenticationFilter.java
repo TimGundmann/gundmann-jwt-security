@@ -21,7 +21,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JWTAuthenticationFilter extends GenericFilterBean {
 
 	private SecurityConfig securityConfig;
@@ -37,12 +39,16 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 		filterChain.doFilter(request, response);
 	}
 	
-    private Authentication getAuthentication(HttpServletRequest request) throws AccessDeniedException {
+    private Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(securityConfig.getHeaderString());
         if (token != null) {
+        	try {
             return parseUserName(token)
             		.map(user -> new UsernamePasswordAuthenticationToken(user, null, parseRoles(token)))
             		.orElse(null);
+        	} catch (Exception e) {
+        		log.error("Error parsing token", e);
+			}
         }
         return null;
     }
