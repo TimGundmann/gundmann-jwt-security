@@ -23,11 +23,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private SecurityConfig securityConfig;
-	private RemoteAddressResolver addressResolver;
 
-	public WebAutoSecurityConfig(SecurityConfig securityConfig, RemoteAddressResolver addressResolver) {
+	public WebAutoSecurityConfig(SecurityConfig securityConfig) {
 		this.securityConfig = securityConfig;
-		this.addressResolver = addressResolver;
 	}
 	
 	@Override
@@ -45,7 +43,7 @@ public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 				.authorizeRequests().anyRequest().authenticated()
 			.and()
-				.addFilterBefore(new JWTAuthenticationFilter(securityConfig, addressResolver), UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(new JWTAuthenticationFilter(securityConfig, remoteAddressResolver()), UsernamePasswordAuthenticationFilter.class);
 				
 	}
 	
@@ -61,4 +59,8 @@ public class WebAutoSecurityConfig extends WebSecurityConfigurerAdapter {
 		return source;
 	}
 	
+	@Bean
+	public RemoteAddressResolver remoteAddressResolver() {
+		return new RemoteAddressResolver();
+	}
 }

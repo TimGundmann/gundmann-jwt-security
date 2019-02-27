@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 
-@Component
 public class RemoteAddressResolver {
 
 	public String remoteAdress(HttpServletRequest request) {
