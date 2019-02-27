@@ -60,18 +60,27 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 	}
 
 	private Optional<String> parseUserName(String token) {
-		return Optional.ofNullable(Jwts.parser().setSigningKey(securityConfig.getSecret())
-				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), "")).getBody().getSubject());
+		return Optional.ofNullable(Jwts.parser()
+				.setSigningKey(securityConfig.getSecret())
+				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
+				.getBody()
+				.getSubject());
 	}
 
-	private Optional<String> parseIp(String token) {
-		return Optional.ofNullable(Jwts.parser().setSigningKey(securityConfig.getSecret())
-				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), "")).getBody().get("ip").toString());
+	private Optional<Object> parseIp(String token) {
+		return Optional.ofNullable(Jwts.parser()
+				.setSigningKey(securityConfig.getSecret())
+				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
+				.getBody()
+				.get("ip"));
 	}
 
 	private Collection<? extends GrantedAuthority> parseRoles(String token) {
-		return Arrays.asList(Jwts.parser().setSigningKey(securityConfig.getSecret())
-				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), "")).getBody().get("roles").toString()
+		return Arrays.asList(Jwts.parser()
+				.setSigningKey(securityConfig.getSecret())
+				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
+				.getBody()
+				.get("roles").toString()
 				.split(",")).stream().filter(r -> !"".equals(r)).map(authority -> {
 					return new SimpleGrantedAuthority(authority);
 				}).collect(Collectors.toList());
