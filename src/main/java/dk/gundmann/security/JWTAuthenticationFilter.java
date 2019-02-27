@@ -44,6 +44,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 		if (token != null) {
 			try {
 				return parseIp(token).map(ip -> {
+					log.info("client ip: " + ip);
 					if (request.getRemoteAddr().equals(ip)) {
 						return parseUserName(token)
 							.map(user -> new UsernamePasswordAuthenticationToken(user, null, parseRoles(token)))
