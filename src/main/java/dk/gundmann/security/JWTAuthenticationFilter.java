@@ -27,9 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 public class JWTAuthenticationFilter extends GenericFilterBean {
 
 	private SecurityConfig securityConfig;
+	private RemoteAddressResolver addressResolver;
 
-	public JWTAuthenticationFilter(SecurityConfig securityConfig) {
+	public JWTAuthenticationFilter(SecurityConfig securityConfig, RemoteAddressResolver addressResolver) {
 		this.securityConfig = securityConfig;
+		this.addressResolver = addressResolver;
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 			try {
 				return parseIp(token).map(ip -> {
 					log.info("client ip: " + ip);
-					if (request.getRemoteAddr().equals(ip)) {
+					if (addressResolver.remoteAdress(request).equals(ip)) {
 						return parseUserName(token)
 							.map(user -> new UsernamePasswordAuthenticationToken(user, null, parseRoles(token)))
 							.orElse(null);
