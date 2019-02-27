@@ -38,43 +38,41 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 		SecurityContextHolder.getContext().setAuthentication(getAuthentication((HttpServletRequest) request));
 		filterChain.doFilter(request, response);
 	}
-	
-    private Authentication getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(securityConfig.getHeaderString());
-        if (token != null) {
-        	try {
-            return parseUserName(token)
-            		.map(user -> new UsernamePasswordAuthenticationToken(user, null, parseRoles(token)))
-            		.orElse(null);
-        	} catch (Exception e) {
-        		log.error("Error parsing token", e);
-			}
-        }
-        return null;
-    }
 
-	private Optional<String> parseUserName(String token) throws AccessDeniedException {
-		try {
-			return Optional.ofNullable(Jwts.parser()
-			        .setSigningKey(securityConfig.getSecret())
-			        .parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
-			        .getBody()
-			        .getSubject());
-		} catch (Exception e) {
-			throw new AccessDeniedException("Error parsing token");
+	private Authentication getAuthentication(HttpServletRequest request) {
+		String token = request.getHeader(securityConfig.getHeaderString());
+		if (token != null) {
+			try {
+				return parseIp(token).map(ip -> {
+					if (request.getRemoteAddr().equals(ip)) {
+						return parseUserName(token)
+							.map(user -> new UsernamePasswordAuthenticationToken(user, null, parseRoles(token)))
+							.orElse(null);
+					}
+					return null;
+				}).orElse(null);
+			} catch (Exception e) {
+				log.error("Error parsing token", e);
+			}
 		}
+		return null;
+	}
+
+	private Optional<String> parseUserName(String token) {
+		return Optional.ofNullable(Jwts.parser().setSigningKey(securityConfig.getSecret())
+				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), "")).getBody().getSubject());
+	}
+
+	private Optional<String> parseIp(String token) {
+		return Optional.ofNullable(Jwts.parser().setSigningKey(securityConfig.getSecret())
+				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), "")).getBody().get("ip").toString());
 	}
 
 	private Collection<? extends GrantedAuthority> parseRoles(String token) {
-		return Arrays.asList(Jwts.parser()
-		        .setSigningKey(securityConfig.getSecret())
-		        .parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
-		        .getBody()
-		        .get("roles").toString().split(",")).stream()
-				.filter(r -> !"".equals(r))
-                .map(authority -> {
-                	return new SimpleGrantedAuthority(authority);
-                })
-                .collect(Collectors.toList());
+		return Arrays.asList(Jwts.parser().setSigningKey(securityConfig.getSecret())
+				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), "")).getBody().get("roles").toString()
+				.split(",")).stream().filter(r -> !"".equals(r)).map(authority -> {
+					return new SimpleGrantedAuthority(authority);
+				}).collect(Collectors.toList());
 	}
 }
