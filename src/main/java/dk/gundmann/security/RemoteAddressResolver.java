@@ -2,8 +2,6 @@ package dk.gundmann.security;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Component;
-
 
 public class RemoteAddressResolver {
 
