@@ -1,7 +1,5 @@
 package dk.gundmann.security;
 
-import java.util.Base64;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Data;
@@ -15,12 +13,5 @@ public class SecurityConfig {
 	private String headerString;
 	private String mailPassword;
 	private String syspassword;
-
-	public String getSecret() {
-		if (this.secret != null) {
-			return Base64.getEncoder().encodeToString(this.secret.getBytes());
-		}
-		return this.secret;
-	}
 
 }
