@@ -49,14 +49,21 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 					if (addressResolver.remoteAdress(request).equals(ip)) {
 						return parseUserName(token)
 							.map(user -> new UsernamePasswordAuthenticationToken(user, null, parseRoles(token)))
-							.orElse(null);
+							.orElseGet(() -> {
+								log.debug("no user");
+								return null;
+							});
 					}
 					return null;
-				}).orElse(null);
+				}).orElseGet(() -> {
+					log.debug("no ip");
+					return null;
+				});
 			} catch (Exception e) {
 				log.error("Error parsing token", e);
 			}
 		}
+		log.debug("no token");
 		return null;
 	}
 
