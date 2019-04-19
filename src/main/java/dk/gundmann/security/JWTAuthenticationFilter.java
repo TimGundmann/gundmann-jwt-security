@@ -53,7 +53,8 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 								log.debug("no user");
 								return null;
 							});
-					}
+					};
+					log.debug("ip not match");
 					return null;
 				}).orElseGet(() -> {
 					log.debug("no ip");
