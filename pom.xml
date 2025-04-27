@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.gundmann</groupId>
     <artifactId>jwt-spring-boot-starter</artifactId>
-    <version>1.0</version>
+    <version>${revision}</version>
     <name>gundmann-jwt-security</name>
     <description>Starter project for jwt security in micro services</description>
     <packaging>jar</packaging>
@@ -13,6 +13,7 @@
         <java.version>23</java.version>
         <spring.version>3.4.4</spring.version>
         <spring.security.version>6.4.5</spring.security.version>
+        <revision>1.0.0-SNAPSHOT</revision>
     </properties>
     <dependencies>
         <dependency>
