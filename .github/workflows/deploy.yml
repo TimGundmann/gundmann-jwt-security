@@ -3,7 +3,7 @@ name: Deploy JAR to GitHub Packages
 on:
   push:
     branches:
-      - main  # or the branch you want to trigger deployment on
+      - master  # or the branch you want to trigger deployment on
 
 jobs:
   deploy:
