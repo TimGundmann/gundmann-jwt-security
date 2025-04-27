@@ -23,6 +23,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and Deploy with Maven
-        run: mvn clean deploy
+        run: mvn clean deploy -Drevision=1.0.${GITHUB_RUN_NUMBER}
         env:
           GITHUB_TOKEN: ${{ secrets.MAVEN_TOKEN }}
