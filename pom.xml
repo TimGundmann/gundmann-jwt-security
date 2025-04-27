@@ -15,6 +15,12 @@
         <spring.security.version>6.4.5</spring.security.version>
     </properties>
 
+    <scm>
+        <connection>scm:git:https://github.com/TimGundmann/gundmann-jwt-security.git</connection>
+        <developerConnection>scm:git:git@github.com:TimGundmann/gundmann-jwt-security.git</developerConnection>
+        <url>https://github.com/TimGundmann/gundmann-jwt-security</url>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -121,6 +127,36 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
