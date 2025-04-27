@@ -13,8 +13,8 @@
         <java.version>23</java.version>
         <spring.version>3.4.4</spring.version>
         <spring.security.version>6.4.5</spring.security.version>
+        <revision>1.0.${buildNumber}</revision>
     </properties>
-
     <scm>
         <connection>scm:git:https://github.com/TimGundmann/gundmann-jwt-security.git</connection>
         <developerConnection>scm:git:git@github.com:TimGundmann/gundmann-jwt-security.git</developerConnection>
