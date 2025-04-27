@@ -1,6 +1,6 @@
 package dk.gundmann.security;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 public class RemoteAddressResolver {

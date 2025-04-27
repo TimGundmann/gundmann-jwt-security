@@ -6,12 +6,11 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -71,6 +70,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 	private Optional<String> parseUserName(String token) {
 		return Optional.ofNullable(Jwts.parser()
 				.setSigningKey(securityConfig.getSecret())
+				.build()
 				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
 				.getBody()
 				.getSubject());
@@ -79,7 +79,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 	private Optional<Object> parseIp(String token) {
 		return Optional.ofNullable(Jwts.parser()
 				.setSigningKey(securityConfig.getSecret())
-				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
+				.build().parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
 				.getBody()
 				.get("ip"));
 	}
@@ -87,7 +87,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 	private Collection<? extends GrantedAuthority> parseRoles(String token) {
 		return Arrays.asList(Jwts.parser()
 				.setSigningKey(securityConfig.getSecret())
-				.parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
+				.build().parseClaimsJws(token.replace(securityConfig.getTokenPrefix(), ""))
 				.getBody()
 				.get("roles").toString()
 				.split(",")).stream().filter(r -> !"".equals(r)).map(authority -> {
